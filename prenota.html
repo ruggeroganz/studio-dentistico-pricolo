@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prenota una visita · Studio Dentistico Pricolo Milano</title>
 <meta name="description" content="Richiedi un appuntamento allo Studio Dentistico Pricolo di Milano indicando giorno e fascia oraria preferiti.">
-<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -201,6 +201,29 @@ p{max-width:62ch}
 .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
 .note{font-size:.85rem;color:#8a5a00;background:#fff6e0;border:1px dashed #f0d28a;border-radius:10px;padding:8px 12px;display:inline-block}
 
+/* Team: card espandibili */
+.grid.team{align-items:start;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:900px){.grid.team{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.grid.team{grid-template-columns:1fr}}
+.person{background:transparent;border:1px solid transparent;border-radius:calc(var(--r) + 6px);padding:10px;transition:background .35s,box-shadow .35s,transform .35s,border-color .35s}
+.person-btn{all:unset;display:block;width:100%;cursor:pointer;border-radius:var(--r)}
+.person-btn:focus-visible{outline:2px solid var(--sky);outline-offset:4px}
+.person .ph{position:relative;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;background:linear-gradient(160deg,#e6eef5,#f7f9fb);margin-bottom:16px}
+.person .ph img,.person .ph svg{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.person:hover .ph img,.person:hover .ph svg{transform:scale(1.03)}
+.person h3{font-size:1.15rem;padding-inline:4px}
+.person-btn>p{color:var(--ink2);font-size:.95rem;padding-inline:4px}
+.plus{position:absolute;right:14px;bottom:14px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);box-shadow:0 8px 20px -8px rgba(14,42,71,.4);transition:transform .35s,background .35s}
+.plus::before,.plus::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:2px;background:var(--blue);transform:translate(-50%,-50%)}
+.plus::after{transform:translate(-50%,-50%) rotate(90deg)}
+.bio{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+.bio>div{overflow:hidden}
+.bio p{padding:14px 4px 6px;margin-top:12px;border-top:1px solid var(--line);color:var(--ink2);font-size:.95rem}
+.person.open{background:#fff;border-color:var(--line);box-shadow:0 30px 60px -30px rgba(14,42,71,.35);transform:translateY(-6px)}
+.person.open .bio{grid-template-rows:1fr}
+.person.open .plus{transform:rotate(45deg);background:var(--sky2)}
+@media(prefers-reduced-motion:reduce){.person,.bio,.plus{transition:none}}
+
 </style>
 <!-- STYLE:END -->
 </head>
@@ -324,6 +347,19 @@ p{max-width:62ch}
       });
     });
   }
+
+
+  // Team: apertura card
+  var people=document.querySelectorAll('.person');
+  people.forEach(function(card){
+    var btn=card.querySelector('.person-btn');
+    if(!btn) return;
+    btn.addEventListener('click',function(){
+      var willOpen=!card.classList.contains('open');
+      people.forEach(function(c){ c.classList.remove('open'); var b=c.querySelector('.person-btn'); if(b) b.setAttribute('aria-expanded','false'); });
+      if(willOpen){ card.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+    });
+  });
 
   // Anno nel footer
   document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent=new Date().getFullYear(); });

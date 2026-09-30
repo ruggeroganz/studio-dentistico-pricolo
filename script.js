@@ -75,6 +75,19 @@
     });
   }
 
+
+  // Team: apertura card
+  var people=document.querySelectorAll('.person');
+  people.forEach(function(card){
+    var btn=card.querySelector('.person-btn');
+    if(!btn) return;
+    btn.addEventListener('click',function(){
+      var willOpen=!card.classList.contains('open');
+      people.forEach(function(c){ c.classList.remove('open'); var b=c.querySelector('.person-btn'); if(b) b.setAttribute('aria-expanded','false'); });
+      if(willOpen){ card.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+    });
+  });
+
   // Anno nel footer
   document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent=new Date().getFullYear(); });
 })();
