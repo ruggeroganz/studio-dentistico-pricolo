@@ -21,6 +21,30 @@
     if(href===here||(here==='index.html'&&href==='index.html')) a.classList.add('active');
   });
 
+  // Trattamenti: carosello orizzontale automatico
+  var SPEED=40*1.75; // pixel al secondo: velocita base 40, moltiplicata 1,75
+  document.querySelectorAll('.tlist').forEach(function(list){
+    if(list.closest('.marquee')) return;
+    var box=document.createElement('div');
+    box.className='marquee reveal';
+    list.parentNode.insertBefore(box,list);
+    box.appendChild(list);
+    var items=Array.prototype.slice.call(list.children);
+    items.forEach(function(it){ it.classList.remove('reveal','d1','d2','d3'); });
+    items.forEach(function(it){
+      var c=it.cloneNode(true);
+      c.setAttribute('aria-hidden','true');
+      list.appendChild(c);
+    });
+    function setDur(){ list.style.setProperty('--dur',(list.scrollWidth/2/SPEED)+'s'); }
+    setDur();
+    window.addEventListener('resize',setDur);
+    window.addEventListener('load',setDur);
+    var t;
+    box.addEventListener('touchstart',function(){ clearTimeout(t); box.classList.add('paused'); },{passive:true});
+    box.addEventListener('touchend',function(){ clearTimeout(t); t=setTimeout(function(){ box.classList.remove('paused'); },2500); },{passive:true});
+  });
+
   // Reveal allo scroll
   var els=document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window){
